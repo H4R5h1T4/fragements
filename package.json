@@ -12,5 +12,8 @@
     "url": "git+https://github.com/H4R5h1T4/fragments.git"
   },
   "author": "H4R5h1T4",
-  "license": "UNLICENSED"
-} 
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "prettier": "3.7.4"
+  }
+}
