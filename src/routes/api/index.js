@@ -1,15 +1,14 @@
-// src/routes/api/index.js
+const express = require('express');
+const router = express.Router();
+
+const authenticate = require('../../auth/cognito');
+const get = require('./get');
 
 /**
  * The main entry-point for the v1 version of the fragments API.
  */
-const express = require('express');
 
-// Create a router on which to mount our API endpoints
-const router = express.Router();
-
-// Define our first route, which will be: GET /v1/fragments
-router.get('/fragments', require('./get'));
-// Other routes (POST, DELETE, etc.) will go here later on...
+// GET /v1/fragments
+router.get('/fragments', authenticate(), get);
 
 module.exports = router;

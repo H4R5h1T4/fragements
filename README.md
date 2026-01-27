@@ -279,3 +279,75 @@ FRAGMENTS_LOG_LEVEL=debug
 "dev": "node --env-file=.env.debug --watch ./src/server.js",
 "debug": "node --env-file=.env.debug --inspect=0.0.0.0:9229 --watch ./src/server.js"
 ```
+
+# Lab 3
+
+## Features
+
+- REST API built with Express
+- Centralized error handling (404 & 500)
+- Logging using `pino-http`
+- Security headers via `helmet`
+- Response compression
+- Passport.js initialized (authentication placeholder)
+- CORS enabled
+- Unit tests and coverage reports with Jest
+
+---
+
+## Installation
+
+```bash
+git clone https://github.com/yourusername/fragments.git
+cd fragments
+npm install
+```
+
+## Running the App
+
+Start the server:
+npm start
+The app runs on http://localhost:3000 by default.
+
+## Environment Variables
+
+Created a .env file for environment-specific variables:
+NODE_ENV=development
+PORT=3000
+FRAGMENTS_LOG_LEVEL=debug
+
+For testing, an env.jest file is used to load test-specific variables.
+
+## Testing
+
+Run tests:
+npm test
+
+Run tests with coverage:
+npm run coverage
+
+Coverage thresholds:
+Statements: 80%
+Branches: 80%
+Functions: 80%
+Lines: 80%
+
+Coverage HTML report is generated in coverage/lcov-report/index.html.
+
+## API Endpoints
+
+Method Route Description
+GET / Health check & version info
+GET /error-test Throws a test error (for testing)
+
+- - 404 handler for unknown routes
+
+## Error response format:
+
+{
+"status": "error",
+"error": {
+"message": "Error message",
+"code": 500
+}
+}

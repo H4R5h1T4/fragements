@@ -1,53 +1,50 @@
 // src/app.js
-
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
-const passport = require('passport'); // <-- import passport
+const passport = require('passport');
 
-// author and version from package.json
 const { author, version } = require('../package.json');
-
 const logger = require('./logger');
-const pino = require('pino-http')({
-  logger,
-});
+const pino = require('pino-http')({ logger });
 
-// Import our authentication strategy
-const authenticate = require('./auth'); // <-- this is your src/auth.js
+// Import authentication middleware
+const authenticate = require('./auth'); // assume this is a function
 
-// Create Express app
 const app = express();
 
-// Use pino logging middleware
+// Middlewares
 app.use(pino);
-
-// Use helmet for security
 app.use(helmet());
-
-// Use CORS so front-end can talk to backend
 app.use(cors());
-
-// Use compression for faster responses
 app.use(compression());
-
-// Initialize Passport and attach JWT strategy
-passport.use(authenticate.strategy());
+app.use(express.json()); // parse JSON body
 app.use(passport.initialize());
 
-// Now all routes will be in src/routes
-// Root route (health check) is now moved to src/routes/index.js
+// Routes
 app.use('/', require('./routes'));
 
-// 404 middleware for unknown routes
+// ---- TEST ONLY ROUTES ----
+if (process.env.NODE_ENV === 'test') {
+  // Route that triggers an error
+  app.get('/error-test', (req, res, next) => {
+    const err = new Error('test error');
+    err.status = 500;
+    next(err);
+  });
+
+  // Route that succeeds
+  app.get('/success-test', (req, res) => {
+    res.json({ status: 'success' });
+  });
+}
+
+// 404 handler
 app.use((req, res) => {
   res.status(404).json({
     status: 'error',
-    error: {
-      message: 'not found',
-      code: 404,
-    },
+    error: { message: 'not found', code: 404 },
   });
 });
 
@@ -56,16 +53,13 @@ app.use((err, req, res, next) => {
   const status = err.status || 500;
   const message = err.message || 'unable to process request';
 
-  if (status > 499) {
+  if (status >= 500) {
     logger.error({ err }, 'Error processing request');
   }
 
   res.status(status).json({
     status: 'error',
-    error: {
-      message,
-      code: status,
-    },
+    error: { message, code: status },
   });
 });
 
