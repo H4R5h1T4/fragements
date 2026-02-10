@@ -1,13 +1,14 @@
 // src/routes/api/get.js
+const express = require('express');
+
+const router = express.Router();
 
 /**
- * Get a list of fragments for the current user
+ * Simple API root (GET /v1)
+ * Keep it small: it should NOT respond to /v1/fragments or POST requests.
  */
-module.exports = (req, res) => {
-  // TODO: this is just a placeholder. To get something working, return an empty array...
-  res.status(200).json({
-    status: 'ok',
-    // TODO: change me
-    fragments: [],
-  });
-};
+router.get('/', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
+module.exports = router;

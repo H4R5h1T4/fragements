@@ -9,6 +9,8 @@ const get = require('./get');
  */
 
 // GET /v1/fragments
+router.use('/', require('./get'));
+router.use('/', require('./fragments'));
 router.get('/fragments', authenticate(), get);
 
 module.exports = router;

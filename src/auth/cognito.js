@@ -25,6 +25,7 @@ if (process.env.NODE_ENV !== 'test') {
       const payload = await jwtVerifier.verify(token);
       done(null, payload);
     } catch (err) {
+      logger.warn({ err }, 'JWT verification failed');
       done(null, false);
     }
   });
