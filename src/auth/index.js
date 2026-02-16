@@ -1,12 +1,5 @@
-if (process.env.NODE_ENV === 'test') {
-  module.exports = function () {
-    return (req, res, next) => {
-      req.user = { id: 'test-user' }; // fake user
-      next();
-    };
-  };
-
-  module.exports.strategy = () => null;
+if (process.env.HTPASSWD_FILE) {
+  module.exports = require('./basic-auth');
 } else {
   module.exports = require('./cognito');
 }

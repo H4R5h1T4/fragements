@@ -24,11 +24,11 @@ RUN npm install
 # Copy source code
 COPY ./src ./src
 
+# Copy our HTPASSWD file
+COPY ./tests/.htpasswd ./tests/.htpasswd
+
 # Container listens on port 8080
 EXPOSE 8080
 
 # Start the server
 CMD npm start
-
-
-

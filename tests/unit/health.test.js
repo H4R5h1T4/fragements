@@ -1,4 +1,4 @@
-// Mock AWS Cognito Verifier so it never crashes
+
 jest.mock('aws-jwt-verify', () => ({
   CognitoJwtVerifier: {
     create: () => ({
@@ -8,14 +8,14 @@ jest.mock('aws-jwt-verify', () => ({
   },
 }));
 
-// tests/unit/health.test.js
+
 
 const request = require('supertest');
 
-// Get our Express app object (we don't need the server part)
+
 const app = require('../../src/app');
 
-// Get the version and author from our package.json
+
 const { version, author } = require('../../package.json');
 
 describe('/ health check', () => {

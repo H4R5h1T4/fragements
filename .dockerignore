@@ -3,9 +3,12 @@
 coverage/
 node_modules/
 tests/
+!tests/.htpasswd
 .env
 eslint.config.mjs
 .git/
 .gitignore
 .prettier*
 jest*
+
+

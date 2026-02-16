@@ -1,16 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const authenticate = require('../../auth/cognito');
-const get = require('./get');
+const authenticate = require('../../auth');
 
-/**
- * The main entry-point for the v1 version of the fragments API.
- */
+// Protect everything in /v1 with auth
+router.use(authenticate());
 
-// GET /v1/fragments
+// Routes
 router.use('/', require('./get'));
 router.use('/', require('./fragments'));
-router.get('/fragments', authenticate(), get);
 
 module.exports = router;

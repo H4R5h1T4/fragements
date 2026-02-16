@@ -131,7 +131,7 @@ describe('Fragments API routes', () => {
       .get(`/v1/fragments/${id}/info`)
       .set('Authorization', basicAuth());
 
-    // Your current API returns 500 with "fragment not found"
+    
     expect(infoRes.statusCode).toBe(500);
   });
 

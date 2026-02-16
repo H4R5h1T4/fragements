@@ -45,9 +45,9 @@ app.use((req, res) => {
   });
 });
 
-// Error handler
+
 app.use((err, req, res, _next) => {
-  // Touch _next so ESLint stops whining
+ 
   void _next;
 
   const status = err.status || 500;

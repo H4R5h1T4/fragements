@@ -37,6 +37,7 @@
     "http-auth": "^4.2.1",
     "http-auth-passport": "^1.0.7",
     "passport": "^0.7.0",
+    "passport-http": "^0.3.0",
     "passport-http-bearer": "^1.0.1",
     "pino": "^10.1.1",
     "pino-http": "^11.0.0",
