@@ -1,34 +1,35 @@
-# Dockerfile for the Fragments Node.js microservice
-# Builds a Docker Image that can run the server inside a container.
 
-FROM node:23.1.0
+FROM node:23.1.0-slim AS deps
 
-# Image metadata
 LABEL maintainer="Harshita <hharshita3@myseneca.ca>"
 LABEL description="Fragments node.js microservice"
 
-# Default environment variables (safe defaults, no secrets)
 ENV PORT=8080
 ENV NPM_CONFIG_LOGLEVEL=warn
 ENV NPM_CONFIG_COLOR=false
 
-# Use /app as our working directory
 WORKDIR /app
 
-# Copy dependency files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+RUN npm ci --omit=dev
 
-# Copy source code
+FROM node:23.1.0-slim AS runtime
+
+ENV PORT=8080
+ENV NPM_CONFIG_LOGLEVEL=warn
+ENV NPM_CONFIG_COLOR=false
+ENV NODE_ENV=production
+
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY package*.json ./
 COPY ./src ./src
-
-# Copy our HTPASSWD file
 COPY ./tests/.htpasswd ./tests/.htpasswd
 
-# Container listens on port 8080
+USER node
+
 EXPOSE 8080
 
-# Start the server
-CMD npm start
+CMD ["npm", "start"]
