@@ -131,7 +131,6 @@ describe('Fragments API routes', () => {
       .get(`/v1/fragments/${id}/info`)
       .set('Authorization', basicAuth());
 
-    
     expect(infoRes.statusCode).toBe(500);
   });
 
@@ -152,5 +151,69 @@ describe('Fragments API routes', () => {
       .send('bad');
 
     expect(res.statusCode).toBe(415);
+  });
+  test('POST /v1/fragments creates a JSON fragment', async () => {
+    const body = JSON.stringify({ hello: 'world' });
+
+    const res = await request(app)
+      .post('/v1/fragments')
+      .set('Authorization', basicAuth())
+      .set('Content-Type', 'application/json')
+      .send(body);
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body.status).toBe('ok');
+    expect(res.body.fragment.type).toBe('application/json');
+  });
+
+  test('POST /v1/fragments creates a Markdown fragment', async () => {
+    const markdown = '# Hello Markdown';
+
+    const res = await request(app)
+      .post('/v1/fragments')
+      .set('Authorization', basicAuth())
+      .set('Content-Type', 'text/markdown')
+      .send(markdown);
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body.status).toBe('ok');
+    expect(res.body.fragment.type).toBe('text/markdown');
+  });
+
+  test('GET /v1/fragments/:id.html converts markdown to html', async () => {
+    const markdown = '# Hello HTML';
+
+    const created = await request(app)
+      .post('/v1/fragments')
+      .set('Authorization', basicAuth())
+      .set('Content-Type', 'text/markdown')
+      .send(markdown);
+
+    const id = created.body.fragment.id;
+
+    const res = await request(app)
+      .get(`/v1/fragments/${id}.html`)
+      .set('Authorization', basicAuth());
+
+    expect(res.statusCode).toBe(200);
+    expect(res.headers['content-type']).toContain('text/html');
+    expect(res.text).toContain('<h1>Hello HTML</h1>');
+  });
+
+  test('GET /v1/fragments/:id.html returns 415 for unsupported conversion', async () => {
+    const created = await request(app)
+      .post('/v1/fragments')
+      .set('Authorization', basicAuth())
+      .set('Content-Type', 'text/plain')
+      .send('plain text');
+
+    const id = created.body.fragment.id;
+
+    const res = await request(app)
+      .get(`/v1/fragments/${id}.html`)
+      .set('Authorization', basicAuth());
+
+    expect(res.statusCode).toBe(415);
+    expect(res.body.status).toBe('error');
   });
 });

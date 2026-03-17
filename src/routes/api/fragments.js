@@ -2,9 +2,11 @@
 const express = require('express');
 const { createHash } = require('crypto');
 const contentType = require('content-type');
+const MarkdownIt = require('markdown-it');
 const { Fragment } = require('../../model/fragment');
 
 const router = express.Router();
+const md = new MarkdownIt();
 
 const rawBody = express.raw({
   type: '*/*',
@@ -135,6 +137,32 @@ router.get('/fragments/:id/info', async (req, res, next) => {
     return res.status(200).json({
       status: 'ok',
       fragment: fragmentMeta(fragment),
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/fragments/:id.:ext', async (req, res, next) => {
+  try {
+    const ownerId = getOwnerId(req);
+    const { id, ext } = req.params;
+
+    const fragment = await Fragment.byId(ownerId, id);
+    const data = await fragment.getData();
+
+    if (fragment.mimeType === 'text/markdown' && ext === 'html') {
+      const html = md.render(data.toString());
+      res.set('Content-Type', 'text/html');
+      return res.status(200).send(html);
+    }
+
+    return res.status(415).json({
+      status: 'error',
+      error: {
+        code: 415,
+        message: 'unsupported conversion',
+      },
     });
   } catch (err) {
     next(err);

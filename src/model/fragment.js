@@ -162,11 +162,23 @@ class Fragment {
    * @returns {Array<string>} list of supported mime types
    */
   get formats() {
-    // For Assignment 1, only text/plain is supported.
-    // In later assignments, you'll expand this.
-    if (this.mimeType === 'text/plain') {
+    const type = this.mimeType;
+
+    // plain text fragments
+    if (type === 'text/plain') {
       return ['text/plain'];
     }
+
+    // markdown fragments
+    if (type === 'text/markdown') {
+      return ['text/markdown', 'text/html'];
+    }
+
+    // json fragments
+    if (type === 'application/json') {
+      return ['application/json'];
+    }
+
     return [];
   }
 
@@ -178,8 +190,16 @@ class Fragment {
   static isSupportedType(value) {
     try {
       const { type } = contentType.parse(value);
-      const supported = ['text/plain'];
-      return supported.includes(type);
+
+      if (type.startsWith('text/')) {
+        return true;
+      }
+
+      if (type === 'application/json') {
+        return true;
+      }
+
+      return false;
     } catch {
       return false;
     }

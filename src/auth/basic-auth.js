@@ -12,4 +12,4 @@ passport.use(
   })
 );
 
-module.exports = () => authorize('http');
+module.exports = () => authorize('basic');

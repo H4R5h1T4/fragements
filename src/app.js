@@ -15,7 +15,7 @@ app.use(pino);
 app.use(helmet());
 app.use(cors());
 app.use(compression());
-app.use(express.json());
+//app.use(express.json());
 app.use(passport.initialize());
 
 // Routes
@@ -45,9 +45,7 @@ app.use((req, res) => {
   });
 });
 
-
 app.use((err, req, res, _next) => {
- 
   void _next;
 
   const status = err.status || 500;
