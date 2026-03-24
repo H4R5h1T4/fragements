@@ -215,5 +215,5 @@ describe('Fragments API routes', () => {
 
     expect(res.statusCode).toBe(415);
     expect(res.body.status).toBe('error');
-  });
+  }); 
 });
