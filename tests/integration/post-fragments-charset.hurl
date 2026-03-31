@@ -17,4 +17,4 @@ HTTP/1.1 200
 Content-Type: text/plain; charset=utf-8
 
 [Asserts]
-body == "charset"
+body == "Hello with charset"

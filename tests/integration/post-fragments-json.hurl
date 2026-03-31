@@ -21,4 +21,4 @@ HTTP/1.1 200
 Content-Type: application/json; charset=utf-8
 
 [Asserts]
-body == "{\"message\":\"hi\"}"
+body == "{\"message\":\"hello\"}"

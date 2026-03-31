@@ -62,6 +62,20 @@ function fragmentMeta(fragment) {
   };
 }
 
+function handleFragmentNotFound(err, res, next) {
+  if (err.message === 'fragment not found') {
+    return res.status(404).json({
+      status: 'error',
+      error: {
+        code: 404,
+        message: 'Fragment not found',
+      },
+    });
+  }
+
+  return next(err);
+}
+
 router.post('/fragments', rawBody, async (req, res, next) => {
   try {
     const ownerId = getOwnerId(req);
@@ -139,7 +153,7 @@ router.get('/fragments/:id/info', async (req, res, next) => {
       fragment: fragmentMeta(fragment),
     });
   } catch (err) {
-    next(err);
+    return handleFragmentNotFound(err, res, next);
   }
 });
 
@@ -165,7 +179,7 @@ router.get('/fragments/:id.:ext', async (req, res, next) => {
       },
     });
   } catch (err) {
-    next(err);
+    return handleFragmentNotFound(err, res, next);
   }
 });
 
@@ -178,7 +192,7 @@ router.get('/fragments/:id', async (req, res, next) => {
     res.set('Content-Type', fragment.type);
     return res.status(200).send(data);
   } catch (err) {
-    next(err);
+    return handleFragmentNotFound(err, res, next);
   }
 });
 
@@ -221,7 +235,7 @@ router.put('/fragments/:id', rawBody, async (req, res, next) => {
       fragment: fragmentMeta(fragment),
     });
   } catch (err) {
-    next(err);
+    return handleFragmentNotFound(err, res, next);
   }
 });
 
@@ -232,7 +246,7 @@ router.delete('/fragments/:id', async (req, res, next) => {
 
     return res.status(200).json({ status: 'ok' });
   } catch (err) {
-    next(err);
+    return handleFragmentNotFound(err, res, next);
   }
 });
 

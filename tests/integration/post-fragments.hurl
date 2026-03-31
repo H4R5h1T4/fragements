@@ -28,4 +28,4 @@ Content-Type: text/plain; charset=utf-8
 Content-Length: 19
 
 [Asserts]
-body == "fragment!"
+body == "This is a fragment!"
