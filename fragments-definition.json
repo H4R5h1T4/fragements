@@ -1,0 +1,65 @@
+{
+  "family": "fragments",
+  "taskRoleArn": "arn:aws:iam::099332473020:role/LabRole",
+  "executionRoleArn": "arn:aws:iam::099332473020:role/LabRole",
+  "networkMode": "awsvpc",
+  "containerDefinitions": [
+    {
+      "name": "fragments",
+      "image": "099332473020.dkr.ecr.us-east-2.amazonaws.com/fragments:latest",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "name": "fragments-8080-tcp",
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp",
+          "appProtocol": "http"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        {
+          "name": "AWS_REGION",
+          "value": "us-east-2"
+        },
+        {
+          "name": "AWS_S3_BUCKET_NAME",
+          "value": "fragments"
+        },
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        },
+        {
+          "name": "FRAGMENTS_LOG_LEVEL",
+          "value": "info"
+        }
+      ],
+      "environmentFiles": [],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "ulimits": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/fragments",
+          "awslogs-create-group": "true",
+          "awslogs-region": "us-east-2",
+          "awslogs-stream-prefix": "ecs"
+        },
+        "secretOptions": []
+      },
+      "systemControls": []
+    }
+  ],
+  "volumes": [],
+  "placementConstraints": [],
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  }
+}
