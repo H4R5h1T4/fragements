@@ -1,6 +1,3 @@
-# .github/workflows/ci.yml
-
-# Continuous Integration (CI) Workflow
 name: ci
 
 on:
@@ -43,7 +40,7 @@ jobs:
         with:
           dockerfile: Dockerfile
 
-  tests:
+  unit-tests:
     name: Unit Tests
     runs-on: ubuntu-latest
     steps:
@@ -56,15 +53,49 @@ jobs:
           node-version: 'lts/*'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install node dependencies
         run: npm ci
 
       - name: Run tests
         run: npm test
 
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+
+      - name: Install node dependencies
+        run: npm install
+
+      - name: Install Hurl
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y hurl
+
+      - name: Build Containers
+        run: docker compose up -d --build
+
+      - name: Setup Local AWS Resources
+        run: ./scripts/local-aws-setup.sh
+
+      - name: Run Hurl Tests
+        run: npm run test:integration
+
+      - name: Stop Containers
+        if: always()
+        run: docker compose down
+
   docker-hub:
     name: Build and Push to Docker Hub
-    needs: [lint, dockerfile-lint, tests]
+    needs: [lint, dockerfile-lint, unit-tests, integration-tests]
     runs-on: ubuntu-latest
     steps:
       - name: Check out code

@@ -58,8 +58,8 @@ Authorization: Basic dGVzdC11c2VyMUBmcmFnbWVudHMtdGVzdGluZy5jb206cGFzc3dvcmQx
 HTTP 200
 [Asserts]
 jsonpath "$.status" == "ok"
-jsonpath "$.fragments" includes "{{fragment1_id}}"
-jsonpath "$.fragments" includes "{{fragment2_id}}"
+jsonpath "$.fragments" contains "{{fragment1_id}}"
+jsonpath "$.fragments" contains "{{fragment2_id}}"
 
 ###
 DELETE {{fragment1_url}}
@@ -80,5 +80,5 @@ Authorization: Basic dGVzdC11c2VyMUBmcmFnbWVudHMtdGVzdGluZy5jb206cGFzc3dvcmQx
 HTTP 200
 [Asserts]
 jsonpath "$.status" == "ok"
-jsonpath "$.fragments" not includes "{{fragment1_id}}"
-jsonpath "$.fragments" includes "{{fragment2_id}}"
+jsonpath "$.fragments" not contains "{{fragment1_id}}"
+jsonpath "$.fragments" contains "{{fragment2_id}}"
