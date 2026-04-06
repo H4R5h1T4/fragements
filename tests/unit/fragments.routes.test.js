@@ -131,7 +131,7 @@ describe('Fragments API routes', () => {
       .get(`/v1/fragments/${id}/info`)
       .set('Authorization', basicAuth());
 
-    expect(infoRes.statusCode).toBe(500);
+    expect(infoRes.statusCode).toBe(404);
   });
 
   test('POST /v1/fragments fails without Content-Type', async () => {
@@ -215,5 +215,5 @@ describe('Fragments API routes', () => {
 
     expect(res.statusCode).toBe(415);
     expect(res.body.status).toBe('error');
-  }); 
+  });
 });
