@@ -75,11 +75,6 @@ jobs:
       - name: Install node dependencies
         run: npm install
 
-      - name: Install Hurl
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y hurl
-
       - name: Build Containers
         run: docker compose up -d --build
 
