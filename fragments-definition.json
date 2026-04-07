@@ -28,6 +28,10 @@
           "value": "fragments"
         },
         {
+          "name": "AWS_DYNAMODB_TABLE_NAME",
+          "value": "fragments"
+        },
+        {
           "name": "NODE_ENV",
           "value": "production"
         },
