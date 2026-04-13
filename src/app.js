@@ -1,5 +1,5 @@
 // src/app.js
-const API_URL = process.env.API_URL || 'http://localhost:8080';
+//const API_URL = process.env.API_URL || 'http://localhost:8080';
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
