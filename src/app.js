@@ -1,4 +1,5 @@
 // src/app.js
+const API_URL = process.env.API_URL || 'http://localhost:8080';
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -13,7 +14,12 @@ const app = express();
 // Core middleware
 app.use(pino);
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: '*',
+    exposedHeaders: ['Location'],
+  })
+);
 app.use(compression());
 //app.use(express.json());
 app.use(passport.initialize());
